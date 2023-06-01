@@ -1,0 +1,16 @@
+version: "3.4"
+
+services:
+  calendario_frontend:
+    image: node:alpine
+    restart: always
+    container_name: calendario_frontend
+    entrypoint: /bin/sh
+    ports:
+      - 8000:8000
+    working_dir: /srv/app
+    volumes:
+      - type: bind
+        source: ./
+        target: /srv/app
+    tty: true

@@ -33,8 +33,10 @@ const Calendario = () => {
   });
 
   const onClickDia = useCallback(
-    (value: Date, event: MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      if (event.target.nodeName !== "DIV") {
+    (_value: Date, event: MouseEvent<HTMLButtonElement>) => {
+      if (
+        (event.target as EventTarget & { nodeName: string }).nodeName !== "DIV"
+      ) {
         if (textareaRef.current) textareaRef.current.value = "";
         setNota(null);
         setIdNota(null);
@@ -48,9 +50,8 @@ const Calendario = () => {
 
   const obtenerJSXNotas = useCallback(
     (date: Date) =>
-      queryClient
-        .getQueryData(["notas"])
-        ?.data.filter(({ fecha }: { fecha: string }) =>
+      (queryClient.getQueryData(["notas"]) as any)?.data
+        .filter(({ fecha }: { fecha: string }) =>
           filtrarNotasPorFecha(fecha, date)
         )
         .map(({ id, nota }: { id: number; nota: string }) => (
@@ -71,7 +72,7 @@ const Calendario = () => {
   );
 
   const escapePulsado = useCallback(
-    (event) => {
+    (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setElementoAncla(null);
         setNota(null);
@@ -95,7 +96,10 @@ const Calendario = () => {
       id="contenedor"
       className="flex justify-center w-full align-middle h-full"
       onClick={(event) => {
-        const { nodeName, id } = event.target;
+        const { nodeName, id } = event.target as EventTarget & {
+          nodeName: string;
+          id: string;
+        };
         if (nodeName === "DIV" && id === "contenedor") setElementoAncla(null);
       }}
     >
@@ -112,7 +116,8 @@ const Calendario = () => {
           setIdNota={setIdNota}
         />
         <Calendar
-          onChange={onChangeFecha}
+          locale="es-VE"
+          onChange={(value) => onChangeFecha(value as Date)}
           onActiveStartDateChange={() => setElementoAncla(null)}
           onViewChange={() => setElementoAncla(null)}
           onClickDay={(value, event) => onClickDia(value, event)}

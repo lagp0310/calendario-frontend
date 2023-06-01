@@ -90,7 +90,7 @@ const Popper = ({
                   <TextareaAutosize
                     ref={textareaRef}
                     className="p-2 ring ring-blue-200 focus:outline-none rounded-lg"
-                    onChange={(event) => setNota(event.target.value)}
+                    onChange={(event: any) => setNota(event.target.value)}
                     placeholder="Nota Nueva"
                     value={nota ?? ""}
                     id="textarea-nota"
